@@ -6,7 +6,7 @@ const router = Router();
 import prisma from "../../prisma/prismaClient";
 
 const dotenv = require("dotenv");
-const generateAccessToken = require("../functions/generateToken");
+import generateAccessToken from "../functions/generateToken";
 import authenticateToken from "../functions/authenticateToken";
 dotenv.config();
 router.get(
@@ -40,15 +40,15 @@ router.delete(
 
 //create user
 router.post(
-  "/signup/:username/:password:email",
+  "/signup/:username/:password/:email",
   (req: Request, res: Response) => {
     const {username, password, email} = req.params;
     const token = generateAccessToken(username);
     res.json(token);
-    res.send(`User ${username} has been created with password ${password}`);
+    //res.send(`User ${username} has been created with password ${password}`);
+    return;
   }
 );
-
 //test endpoint
 router.get("/", (req: Request, res: Response) => {
   res.send("Welcome to Express & TypeScript Server");
