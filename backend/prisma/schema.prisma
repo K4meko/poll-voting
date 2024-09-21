@@ -1,0 +1,49 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  username      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+model poll{
+  id        String   @id @default(cuid())
+  title     String
+  options   String[]
+  userId    String
+  questions question[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+model vote {
+  id        String   @id @default(cuid())
+  questionId String
+  question  question @relation(fields: [questionId], references: [id])
+  option    Int
+  number    Int
+}
+model question{
+  id        String   @id @default(cuid())
+  pollId    String
+  poll      poll @relation(fields: [pollId], references: [id])
+  title     String
+  options   String[]
+  votes     vote[]
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
